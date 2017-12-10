@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+
+<%= link_to '個人情報編集', edit_user_registration_path(current_user.id) %>
+
+<h1>投稿一覧</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>画像</th>
+      <th>タイトル</th>
+      <th>内容</th>
+      <th>興味・関心</th>
+      <th>投稿者</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <% if post.image? %>
+          <td><%= image_tag post.image.url %></td>
+        <% else %>
+          <td>画像がありません</td>
+        <% end %>
+        <td><%= link_to post.title, post_path(post) .truncate(15) %></td>
+        <td><%= post.body .truncate(15) %></td>
+        <td><%= render 'posts/tag_list', tag_list: post.interest_list %></td>
+        <% if post.user.nil? %>
+          <td>no user</td>
+        <% else %>
+          <td><%= link_to post.user.nickname, user_path(post.user) %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate @posts %>
+
+<br>
+
+<%= link_to '新しい投稿をする！', new_post_path %>
